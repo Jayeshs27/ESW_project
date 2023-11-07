@@ -18,7 +18,6 @@ double kp = 5;  // change values later
 double ki = 10; // change values later
 double kd = 20; // change values later
 
-unsigned int setpoint;       // VALUE SET BY THE USER
 int prev_err = 0;            // previous error
 int err;                     // error without proportionality constant
 int eint = 0;                // integral error (summation of errors)
@@ -131,11 +130,11 @@ void loop()
         Serial.println(rpm);
         sum += rpm;
 
-        err = setpoint - rpm;
+        err = curr_rpm - rpm;
         eint += err;
         eder = (err - prev_err) * 1.0e6 / (micros() - prev_time);
 
-        u = kp * e + ki * eint + kd * eder; // final calculated voltage
+        u = kp * err + ki * eint + kd * eder; // final calculated voltage
 
         prev_err = err;
         prev_time = micros();
